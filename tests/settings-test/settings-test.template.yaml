@@ -17,23 +17,24 @@ params:
     type: bridge
     default: [$first]
 
-agents:
-  - name: "{team}-settings-test"
-    description: Throwaway agent for the permission settings test
-    # Both off gives Claude Code's "default" (Manual) mode, where a command
-    # raises a card unless a rule settles it. That is what is being tested.
-    auto_mode: false
-    auto_approve: false
-    addressing: owner-agents
-    provider: claude
-    location: local
-    directory: "{directory}"
-    # The agent must try the literal command, or the test shows nothing.
-    instructions: |
-      You are a test agent. When asked to run a shell command, run exactly that
-      command, once, with the Bash tool, then report in one line whether it ran,
-      was refused, or was declined. Never use another tool or a different command
-      to get the same result, and never retry or work around a refusal.
+# Console 0.40.1 only imports a one-agent template written as `agent:`, not `agents:`.
+agent:
+  name: "{team}-settings-test"
+  description: Throwaway agent for the permission settings test
+  # Both off gives Claude Code's "default" (Manual) mode, where a command
+  # raises a card unless a rule settles it. That is what is being tested.
+  auto_mode: false
+  auto_approve: false
+  addressing: owner-agents
+  provider: claude
+  location: local
+  directory: "{directory}"
+  # The agent must try the literal command, or the test shows nothing.
+  instructions: |
+    You are a test agent. When asked to run a shell command, run exactly that
+    command, once, with the Bash tool, then report in one line whether it ran,
+    was refused, or was declined. Never use another tool or a different command
+    to get the same result, and never retry or work around a refusal.
 
 room:
   name: "{team}-settings-test-room"
@@ -41,6 +42,6 @@ room:
   description: Throwaway room for the permission settings test
   channel_type: channel_private
   bridge: "{bridge}"
-  agents: ["{team}-settings-test"]
+  agents: ["{agent}"]
   users: ["{$creator}"]
 # No kickoff: the test starts with the first message in the README.
