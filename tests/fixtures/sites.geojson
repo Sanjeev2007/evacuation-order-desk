@@ -1,0 +1,11 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {"type": "Feature", "properties": {"site_id": "A", "name": "FIXTURE BUILDING NAME"}, "geometry": {"type": "Point", "coordinates": [1, 1]}},
+    {"type": "Feature", "properties": {"site_id": "B", "name": "FIXTURE BUILDING NAME"}, "geometry": {"type": "Point", "coordinates": [30, 30]}},
+    {"type": "Feature", "properties": {"site_id": "C", "name": "FIXTURE BUILDING NAME"}, "geometry": {"type": "Point", "coordinates": [31, 31]}},
+    {"type": "Feature", "properties": {"site_id": "D", "name": "FIXTURE BUILDING NAME"}, "geometry": {"type": "Point", "coordinates": [5, 5]}},
+    {"type": "Feature", "properties": {"site_id": "E", "name": "FIXTURE BUILDING NAME"}, "geometry": {"type": "Point", "coordinates": [21, 21]}},
+    {"type": "Feature", "properties": {"site_id": "F", "name": "FIXTURE BUILDING NAME"}, "geometry": {"type": "Point", "coordinates": [32, 32]}}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(python3 check_draft.py *)",
+      "Edit(/drafts/**)"
+    ],
+    "ask": [
+      "Bash(*issue_order.py*)"
+    ]
+  }
+}

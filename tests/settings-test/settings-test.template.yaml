@@ -1,0 +1,46 @@
+# Settings test: does Switch honour a folder's .claude/settings.json?
+# One throwaway agent in one private room. Run this before anything else.
+# See README.md in this folder for the three messages and how to read the result.
+version: 1
+
+params:
+  team:
+    type: string
+    label: Test prefix
+    description: Prefix for the names this creates. Use a new one for each rerun (st1, st2, ...).
+    pattern: "[a-z][a-z0-9-]*"
+  directory:
+    type: directory
+    label: Path to this test folder
+    description: Full path to tests/settings-test inside your run clone. No ~ and no trailing slash.
+  bridge:
+    type: bridge
+    default: [$first]
+
+agents:
+  - name: "{team}-settings-test"
+    description: Throwaway agent for the permission settings test
+    # Both off gives Claude Code's "default" (Manual) mode, where a command
+    # raises a card unless a rule settles it. That is what is being tested.
+    auto_mode: false
+    auto_approve: false
+    addressing: owner-agents
+    provider: claude
+    location: local
+    directory: "{directory}"
+    # The agent must try the literal command, or the test shows nothing.
+    instructions: |
+      You are a test agent. When asked to run a shell command, run exactly that
+      command, once, with the Bash tool, then report in one line whether it ran,
+      was refused, or was declined. Never use another tool or a different command
+      to get the same result, and never retry or work around a refusal.
+
+room:
+  name: "{team}-settings-test-room"
+  # The server's room schema requires a description, though the docs don't say so.
+  description: Throwaway room for the permission settings test
+  channel_type: channel_private
+  bridge: "{bridge}"
+  agents: ["{team}-settings-test"]
+  users: ["{$creator}"]
+# No kickoff: the test starts with the first message in the README.

@@ -1,0 +1,35 @@
+{
+  "_notice": "Test fixture. Synthetic numbers, made-up towns.",
+  "stages": {
+    "1": {
+      "inflow_m3s": 500,
+      "level_m": 80,
+      "releases": [
+        {"id": "R0", "release_m3s": 299},
+        {"id": "R1", "release_m3s": 300},
+        {"id": "R2", "release_m3s": 600}
+      ]
+    },
+    "2": {
+      "inflow_m3s": 1500,
+      "level_m": 90,
+      "releases": [
+        {"id": "R3", "release_m3s": 900}
+      ]
+    }
+  },
+  "towns": [
+    {"name": "Alpha", "threshold_release_m3s": 300, "evacuees": 100, "staff": 4, "boats": 1},
+    {"name": "Bravo", "threshold_release_m3s": 600, "evacuees": 200, "staff": 6, "boats": 2},
+    {"name": "Charlie", "threshold_release_m3s": 900, "evacuees": 400, "staff": 8, "boats": 3}
+  ],
+  "sites": {
+    "A": {"capacity": 1000},
+    "B": {"capacity": 50},
+    "C": {"capacity": 500},
+    "D": {"capacity": 1000},
+    "E": {"capacity": 1000},
+    "F": {"capacity": 300},
+    "G": {"capacity": 1000}
+  }
+}
