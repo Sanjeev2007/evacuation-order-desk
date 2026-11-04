@@ -31,7 +31,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/reservoir"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator and {team}-mapper. Your brief is briefs/reservoir.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator or mapper. Get exact names from list_participants before addressing anyone. Your brief is briefs/reservoir.md. Read it at the start of every task."
   - name: "{team}-coordinator"
     description: DRILL coordinator. The only agent in both rooms; passes only the listed blocks.
     addressing: owner-agents
@@ -40,7 +40,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/coordinator"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator and {team}-mapper. Your brief is briefs/coordinator.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator or mapper. Get exact names from list_participants before addressing anyone. Your brief is briefs/coordinator.md. Read it at the start of every task."
   - name: "{team}-mapper"
     description: DRILL mapper. Names the affected towns from towns.py.
     addressing: owner-agents
@@ -49,7 +49,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/field"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator and {team}-mapper. Your brief is briefs/mapper.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator or mapper. Get exact names from list_participants before addressing anyone. Your brief is briefs/mapper.md. Read it at the start of every task."
 
 group:
   name: "{team} evacuation order desk (first slice)"

@@ -31,7 +31,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/reservoir"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/reservoir.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/reservoir.md. Read it at the start of every task."
   - name: "{team}-coordinator"
     description: DRILL coordinator. The only agent in all three rooms; passes only the listed blocks.
     addressing: owner-agents
@@ -40,7 +40,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/coordinator"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/coordinator.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/coordinator.md. Read it at the start of every task."
   # The three Field agents share one folder, and so share its settings file.
   - name: "{team}-mapper"
     description: DRILL mapper. Names the affected towns from towns.py.
@@ -50,7 +50,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/field"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/mapper.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/mapper.md. Read it at the start of every task."
   - name: "{team}-field"
     description: DRILL field agent. Reports readiness from readiness.py.
     addressing: owner-agents
@@ -59,7 +59,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/field"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/field.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/field.md. Read it at the start of every task."
   - name: "{team}-site-checker"
     description: DRILL site checker. Checks a candidate site with check_site.py.
     addressing: owner-agents
@@ -68,7 +68,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/field"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/site-checker.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/site-checker.md. Read it at the start of every task."
   # The only agent with Auto off: with both modes off, issue_order.py raises a
   # card before it runs. owner-agents lets the coordinator hand over work, and
   # means only the owner can answer the card.
@@ -80,7 +80,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/writer"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/writer.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/writer.md. Read it at the start of every task."
   - name: "{team}-record-keeper"
     description: DRILL record keeper. Writes who decided what, when and why.
     addressing: owner-agents
@@ -89,7 +89,7 @@ agents:
     provider: claude
     location: local
     directory: "{directory}/desks/record"
-    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/record-keeper.md. Read it at the start of every task."
+    instructions: "Every agent on this team has the same prefix followed by its role: reservoir, coordinator, mapper, field, site-checker, writer or record-keeper. Get exact names from list_participants before addressing anyone. Your brief is briefs/record-keeper.md. Read it at the start of every task."
 
 group:
   name: "{team} evacuation order desk"
