@@ -1,0 +1,131 @@
+# Evacuation Order Desk: seven agents in three private rooms produce one
+# human-approved DRILL evacuation order. Claude is fixed as the provider, so a
+# deployer without a signed-in Claude gets provider_login_missing.
+version: 1
+
+params:
+  team:
+    type: string
+    label: Team prefix
+    description: Prefix for every name. Use a new one for each rerun (r1, r2, ...).
+    pattern: "[a-z][a-z0-9-]*"
+  # Required and asked on the form: a default could not point at someone's clone.
+  directory:
+    type: directory
+    label: Path to your clone of this repo
+    description: Full path to the top of the clone. No ~ and no trailing slash. Check each agent's card shows the right folder before you create.
+  bridge:
+    type: bridge
+    default: [$first]
+
+# Every setting is written out, because the docs and the server code disagree on
+# the default for addressing.
+agents:
+  - name: "{team}-reservoir"
+    description: DRILL reservoir desk. Proposes a release and waits for the engineer.
+    # anyone, so @dave_007 can talk to it. This also lets any room member answer
+    # its cards, so the engineer's approval is not a lock.
+    addressing: anyone
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/reservoir"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/reservoir.md. Read it at the start of every task."
+  - name: "{team}-coordinator"
+    description: DRILL coordinator. The only agent in all three rooms; passes only the listed blocks.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/coordinator"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/coordinator.md. Read it at the start of every task."
+  # The three Field agents share one folder, and so share its settings file.
+  - name: "{team}-mapper"
+    description: DRILL mapper. Names the affected towns from towns.py.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/field"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/mapper.md. Read it at the start of every task."
+  - name: "{team}-field"
+    description: DRILL field agent. Reports readiness from readiness.py.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/field"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/field.md. Read it at the start of every task."
+  - name: "{team}-site-checker"
+    description: DRILL site checker. Checks a candidate site with check_site.py.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/field"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/site-checker.md. Read it at the start of every task."
+  # The only agent with Auto off: with both modes off, issue_order.py raises a
+  # card before it runs. owner-agents lets the coordinator hand over work, and
+  # means only the owner can answer the card.
+  - name: "{team}-writer"
+    description: DRILL writer. Drafts the order and issues it only after the owner approves.
+    addressing: owner-agents
+    auto_mode: false
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/writer"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/writer.md. Read it at the start of every task."
+  - name: "{team}-record-keeper"
+    description: DRILL record keeper. Writes who decided what, when and why.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/record"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator, {team}-mapper, {team}-field, {team}-site-checker, {team}-writer and {team}-record-keeper. Your brief is briefs/record-keeper.md. Read it at the start of every task."
+
+group:
+  name: "{team} evacuation order desk"
+  description: DRILL only. Hypothetical dam release, not a real order.
+
+# No kickoffs: known issue #1158 can make a kickoff retry every 10 minutes, so
+# one could fire during a recording. Add one only if the Stage 1 kickoff test
+# shows no retry. Until then, a person's first message starts the work.
+#
+# @dave_007 is added to rooms by hand in Mattermost, because a user param naming
+# them would likely fail on another server.
+rooms:
+  - name: "{team}-reservoir"
+    # The server's room schema requires a description, though the docs don't say so.
+    description: DRILL. The engineer and the reservoir agent agree a release here.
+    channel_type: channel_private
+    bridge: "{bridge}"
+    agents: ["{team}-reservoir", "{team}-coordinator"]
+    users: ["{$creator}"]
+  - name: "{team}-field"
+    description: DRILL. Towns, candidate site and readiness are worked out here.
+    channel_type: channel_private
+    bridge: "{bridge}"
+    agents: ["{team}-mapper", "{team}-field", "{team}-site-checker", "{team}-coordinator"]
+    users: ["{$creator}"]
+  - name: "{team}-decision"
+    description: DRILL. The order is drafted, approved and recorded here.
+    channel_type: channel_private
+    bridge: "{bridge}"
+    agents: ["{team}-writer", "{team}-record-keeper", "{team}-coordinator"]
+    users: ["{$creator}"]
+
+# Links are one-way signposts, so each direction is its own entry. They grant no
+# access: room membership is the wall, and the coordinator is the only way across.
+links:
+  - { from: "{team}-reservoir", to: "{team}-field", label: notices }
+  - { from: "{team}-field", to: "{team}-reservoir", label: staging requests }
+  - { from: "{team}-field", to: "{team}-decision", label: order package }
+  - { from: "{team}-decision", to: "{team}-field", label: order status }

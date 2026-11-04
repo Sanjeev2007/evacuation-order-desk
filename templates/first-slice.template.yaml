@@ -1,0 +1,82 @@
+# Stage 1 first slice: reservoir, coordinator and mapper in two private rooms.
+# The agents need desks/<folder>/briefs/<agent>.md in the clone before you deploy.
+version: 1
+
+params:
+  team:
+    type: string
+    label: Team prefix
+    description: Prefix for every name. Use a new one for each rerun (r1, r2, ...).
+    pattern: "[a-z][a-z0-9-]*"
+  # Required and asked on the form: a default could not point at someone's clone.
+  directory:
+    type: directory
+    label: Path to your clone of this repo
+    description: Full path to the top of the clone. No ~ and no trailing slash. Check each agent's card shows the right folder before you create.
+  bridge:
+    type: bridge
+    default: [$first]
+
+# Every setting is written out, because the docs and the server code disagree on
+# the default for addressing. Instructions name only these three teammates, so
+# no agent tries to reach someone this slice doesn't create.
+agents:
+  - name: "{team}-reservoir"
+    description: DRILL reservoir desk. Proposes a release and waits for the engineer.
+    # anyone, so @dave_007 can talk to it. This also lets any room member answer
+    # its cards, so the engineer's approval is not a lock.
+    addressing: anyone
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/reservoir"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator and {team}-mapper. Your brief is briefs/reservoir.md. Read it at the start of every task."
+  - name: "{team}-coordinator"
+    description: DRILL coordinator. The only agent in both rooms; passes only the listed blocks.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/coordinator"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator and {team}-mapper. Your brief is briefs/coordinator.md. Read it at the start of every task."
+  - name: "{team}-mapper"
+    description: DRILL mapper. Names the affected towns from towns.py.
+    addressing: owner-agents
+    auto_mode: true
+    auto_approve: false
+    provider: claude
+    location: local
+    directory: "{directory}/desks/field"
+    instructions: "Your team prefix is {team}. Your teammates are named {team}-reservoir, {team}-coordinator and {team}-mapper. Your brief is briefs/mapper.md. Read it at the start of every task."
+
+group:
+  name: "{team} evacuation order desk (first slice)"
+  description: DRILL only. Stage 1 test of the reservoir and field rooms.
+
+rooms:
+  - name: "{team}-reservoir"
+    # The server's room schema requires a description, though the docs don't say so.
+    description: DRILL. The engineer and the reservoir agent agree a release here.
+    channel_type: channel_private
+    bridge: "{bridge}"
+    agents: ["{team}-reservoir", "{team}-coordinator"]
+    users: ["{$creator}"]
+    # Tests whether the kickoff retries every 10 minutes (#1158). It starts no
+    # work, so a retry can't trigger a release. Real work starts with a message
+    # from the engineer. If it retries, leave kickoffs out for good.
+    kickoff: |
+      @{team}-reservoir this is a start-up check. Reply in one line to say you are here. Don't propose a release and don't run any command.
+  - name: "{team}-field"
+    description: DRILL. The mapper names towns here from the release notice.
+    channel_type: channel_private
+    bridge: "{bridge}"
+    agents: ["{team}-mapper", "{team}-coordinator"]
+    users: ["{$creator}"]
+
+# Links are one-way, so each direction is its own entry. Stage 1 finds out
+# whether the reverse link matters.
+links:
+  - { from: "{team}-reservoir", to: "{team}-field", label: notices }
+  - { from: "{team}-field", to: "{team}-reservoir", label: staging requests }
