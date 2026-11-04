@@ -6,3 +6,14 @@ switch-hackathon-2026/
 .env
 .env.*
 .gstack/
+
+# Private plans
+build-plan.md
+implementation-plan.md
+
+# Run output and Python caches
+desks/writer/drafts/
+desks/writer/orders/
+desks/record/records/
+__pycache__/
+*.pyc
