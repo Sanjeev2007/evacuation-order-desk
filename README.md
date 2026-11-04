@@ -31,6 +31,8 @@ A coordinator agent sits in all three rooms and is the only link between them. I
 
 You'll need [Switch Console](https://docs.switchagents.ai/switch-rooms/getting-started) (built on 0.40.1, with core 0.31.0), Docker, and Claude Code signed in. Full steps will be added once the workflow has been run from a clean clone.
 
+**Trust your clone once before running it.** Switch starts Claude Code without showing its trust prompt, and until a folder is trusted, the folder's allow rules are ignored. In that state, the first lock's check raises a card it shouldn't need. Block rules apply either way. To trust it, run `claude` in the clone, accept the prompt, then type `/exit`.
+
 To run the tests, with no install needed:
 ```
 python3 -m unittest discover -s tests

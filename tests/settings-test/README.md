@@ -4,7 +4,7 @@ Run this first. The two locks depend on Claude Code following each folder's `.cl
 
 **What it checks:** with Auto off, does an allow rule stop a card, does a deny rule refuse a command, and does everything else still raise a card?
 
-**Status:** written, not yet run.
+**Status:** run on 4 Nov 2026 with Console 0.40.1 and core 0.31.0. The first run, before trusting the clone, gave result B. After the trust step below, it gave result A.
 
 ## Before you start
 
