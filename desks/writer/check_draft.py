@@ -9,9 +9,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from eod.order_rules import draft_problems, sha256_hex
+from eod.order_rules import draft_problems, path_problems, sha256_hex
 
 ORDERS_DIR = Path(__file__).resolve().parent / "orders"
+DRAFTS_DIR = Path(__file__).resolve().parent / "drafts"
 
 
 class BlockingParser(argparse.ArgumentParser):
@@ -29,17 +30,21 @@ def block(problems):
 
 
 def main():
+    sys.stdout.reconfigure(errors="backslashreplace")  # An odd character can't crash a message.
     parser = BlockingParser(description=__doc__)
     parser.add_argument("draft")
     args = parser.parse_args()
 
+    draft_path = Path(args.draft)
+    if path_problems(draft_path, DRAFTS_DIR):
+        block(path_problems(draft_path, DRAFTS_DIR))
     try:
-        raw = Path(args.draft).read_bytes()
+        raw = draft_path.read_bytes()
     except OSError as error:
         block([f"cannot read {args.draft!r}: {error.strerror}"])
 
     # The hash and the checks both use these same bytes, so they can't describe different files.
-    problems = draft_problems(raw, ORDERS_DIR)
+    problems = draft_problems(raw, ORDERS_DIR, draft_path)
     if problems:
         block(problems)
 

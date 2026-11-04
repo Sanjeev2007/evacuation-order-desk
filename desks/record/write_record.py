@@ -9,10 +9,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from eod.order_rules import is_valid_package_id
+from eod.order_rules import is_valid_package_id, sha256_hex
 from eod.scenario import EodError, load_json, print_result
 
 RECORDS_DIR = Path(__file__).resolve().parent / "records"
+ORDERS_DIR = Path(__file__).resolve().parents[1] / "writer" / "orders"
 HEADING_NOTE = "DRILL record. Synthetic scenario. Nothing was sent."
 ENTRY_FIELDS = ["time", "who", "decision", "why", "source"]
 
@@ -45,12 +46,21 @@ def table_cell(text):
     return " ".join(text.split()).replace("|", "\\|")
 
 
-def render_record(notes):
+def issued_order_hash(package_id):
+    """A record can only describe an order that was issued, and it pins that exact file."""
+    try:
+        return sha256_hex((ORDERS_DIR / f"order-{package_id}.md").read_bytes())
+    except OSError:
+        raise EodError(f"order {package_id} has not been issued, so there is nothing to record")
+
+
+def render_record(notes, order_hash):
     lines = [
         f"# {HEADING_NOTE}",
         "",
         f"Package: {notes['package_id']}",
         f"Order file: {table_cell(notes['order_file'])}",
+        f"Order file sha256: {order_hash}",
         "",
         "| Time | Who | Decision | Why | Source |",
         "|---|---|---|---|---|",
@@ -69,11 +79,12 @@ def main():
     try:
         notes = load_json(args.input)
         check_notes(notes)
+        order_hash = issued_order_hash(notes["package_id"])
         record_path = RECORDS_DIR / f"record-{notes['package_id']}.md"
         RECORDS_DIR.mkdir(exist_ok=True)
         # Exclusive-create mode ("x") fails if the file exists, so a record is never overwritten.
         with open(record_path, "x", encoding="utf-8") as record_file:
-            record_file.write(render_record(notes))
+            record_file.write(render_record(notes, order_hash))
     except EodError as error:
         print(f"ERROR: {error}", file=sys.stderr)
         return 2

@@ -1,5 +1,6 @@
 """Read the synthetic scenario and answer: which towns are at risk, and how many people?"""
 import json
+import math
 import os
 from pathlib import Path
 
@@ -9,9 +10,9 @@ class EodError(Exception):
 
 
 def data_dir():
-    """EOD_DATA_DIR if set (tests use it), otherwise data/ beside this code."""
+    """data/ beside this code. Only the tests can point elsewhere, so a stray setting can't."""
     override = os.environ.get("EOD_DATA_DIR")
-    if override:
+    if override and os.environ.get("EOD_TESTING") == "1":
         return Path(override)
     return Path(__file__).resolve().parent.parent / "data"
 
@@ -26,8 +27,10 @@ def load_json(path):
 
 
 def is_number(value):
-    # In Python True counts as a number, so it is ruled out by hand.
-    return isinstance(value, (int, float)) and not isinstance(value, bool)
+    # In Python True counts as a number, and JSON readers accept NaN, so both are ruled out by hand.
+    if isinstance(value, float):
+        return math.isfinite(value)
+    return isinstance(value, int) and not isinstance(value, bool)
 
 
 def load_scenario():

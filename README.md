@@ -24,7 +24,7 @@ A coordinator agent sits in all three rooms and is the only link between them. I
 
 ## The two locks
 
-1. **Code check:** `check_draft.py` blocks a draft unless it's marked as a drill and names the at-risk towns, a valid release, a site, English and Spanish text, and the issuing office. It reruns the site check itself, so a draft can't simply claim a site passed.
+1. **Code check:** `check_draft.py` blocks a draft unless it's marked as a drill and names the at-risk towns, a valid release, a site, English and Spanish text, and the issuing office. It reruns the site check itself, so a draft can't simply claim a site passed. It also reads the order's wording: each language must open with its drill word and name only the checked site, and a new order must replace the one that stands.
 2. **Switch approval:** the writer posts the full draft and its hash, then runs `issue_order.py`, which raises an approval card in the room. The writer's addressing setting means only its owner can answer. If the draft changed after the check, the script refuses it.
 
 ## Run it
@@ -42,6 +42,7 @@ python3 -m unittest discover -s tests
 
 - **It's a drill:** the flood, levels, releases, thresholds, evacuee counts, capacities and staffing are all invented.
 - **"Approved" means a chat approval,** not a legally valid signature.
+- **The code can't judge every word of an order:** it catches a wrong site, a missing drill marking and listed phrases, but not, for example, a building's name. The person reading the draft before approving is the check for that.
 - **It isn't a security boundary:** rooms on one Mac separate conversations, not secure data. The folder rules and locks hold back agents following the workflow, but an agent or process working around them could still write a file.
 - **The engineer's approval isn't a lock:** it's a typed message that the reservoir agent judges, and Switch doesn't enforce it.
 - **Separate ownership is simulated:** one person owns every agent and plays both people in the demo.

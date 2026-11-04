@@ -21,6 +21,11 @@ class DataDirTests(unittest.TestCase):
             self.assertEqual(scenario.data_dir(), Path("/some/where"))
 
 
+    def test_env_var_is_ignored_outside_the_tests(self):
+        with mock.patch.dict(os.environ, {"EOD_DATA_DIR": "/some/where", "EOD_TESTING": ""}):
+            self.assertEqual(scenario.data_dir(), REPO / "data")
+
+
 class AtRiskTests(unittest.TestCase):
     def setUp(self):
         patcher = mock.patch.dict(os.environ, {"EOD_DATA_DIR": str(FIXTURES)})

@@ -1,3 +1,4 @@
+import hashlib
 import json
 import sys
 import tempfile
@@ -32,6 +33,9 @@ class WriteRecordTests(unittest.TestCase):
         self.tmp = Path(folder.name)
         self.desk = make_clone(self.tmp / "clone") / "desks" / "record"
         self.records = self.desk / "records"
+        self.orders = self.desk.parent / "writer" / "orders"
+        self.orders.mkdir(parents=True)
+        (self.orders / "order-P1.md").write_text("an issued order", encoding="utf-8")
 
     def write(self, notes):
         path = self.desk / "notes.json"
@@ -55,6 +59,16 @@ class WriteRecordTests(unittest.TestCase):
         self.assertIn("orders/order-P1.md", text)
         self.assertIn("| Time | Who | Decision | Why | Source |", text)
         self.assertIn("| 10:02 | site checker | Site A rejected | Inside the saved layer | Field room message 14 |", text)
+
+    def test_an_order_that_was_never_issued_is_refused(self):
+        notes = good_notes()
+        notes["package_id"] = "P99"
+        self.assert_refused(self.write(notes))
+
+    def test_record_pins_the_exact_order_file(self):
+        self.write(good_notes())
+        expected = hashlib.sha256((self.orders / "order-P1.md").read_bytes()).hexdigest()
+        self.assertIn(f"Order file sha256: {expected}", (self.records / "record-P1.md").read_text(encoding="utf-8"))
 
     def test_each_missing_top_level_field_is_refused(self):
         for field in ("package_id", "order_file", "entries"):

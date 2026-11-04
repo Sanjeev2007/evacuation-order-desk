@@ -44,7 +44,7 @@ def features_in(path):
 
 
 def load_flood_polygons():
-    """Return every polygon. No usable polygons is an error, so bad data can't clear a site."""
+    """Return every polygon. Empty or broken polygons are errors, so they can't clear a site."""
     polygons = []
     for feature in features_in(data_dir() / "flood-zone.geojson"):
         geometry = feature.get("geometry") or {}
@@ -60,6 +60,8 @@ def load_flood_polygons():
         if not polygon or not all(polygon):
             raise EodError("flood-zone.geojson has an empty polygon")
         for ring in polygon:
+            if len(ring) < 4:
+                raise EodError("flood-zone.geojson has a ring with too few points")
             for position in ring:
                 check_lon_lat(position, "flood-zone.geojson")
     return polygons
@@ -82,7 +84,7 @@ def check_site(site_id, stage, release_id):
     scenario = load_scenario()
     release = find_release(scenario, stage, release_id)
     if not isinstance(site_id, str) or site_id not in scenario["sites"]:
-        raise EodError(f"unknown site {site_id!r}")
+        raise EodError(f"unknown site {site_id!r}, use one of {', '.join(sorted(scenario['sites']))}")
 
     capacity = scenario["sites"][site_id]["capacity"]
     demand = demand_for(scenario, release["release_m3s"])
