@@ -1,0 +1,15 @@
+{
+  "_notice": "SYNTHETIC drill data. Invented numbers for a hypothetical scenario, not real measurements.",
+  "stages": {
+    "1": {"inflow_m3s": 420, "level_m": 61.5, "releases": [{"id": "R1", "release_m3s": 300}, {"id": "R1-S", "release_m3s": 180}]},
+    "2": {"inflow_m3s": 640, "level_m": 64.8, "releases": [{"id": "R2", "release_m3s": 480}]}
+  },
+  "towns": [
+    {"name": "Montroi", "threshold_release_m3s": 150, "evacuees": 420, "staff": 14, "boats": 2},
+    {"name": "Alfarb", "threshold_release_m3s": 220, "evacuees": 260, "staff": 9, "boats": 1},
+    {"name": "Carlet", "threshold_release_m3s": 280, "evacuees": 1150, "staff": 32, "boats": 6},
+    {"name": "l'Alcúdia", "threshold_release_m3s": 400, "evacuees": 740, "staff": 21, "boats": 4},
+    {"name": "Algemesí", "threshold_release_m3s": 450, "evacuees": 1380, "staff": 38, "boats": 8}
+  ],
+  "sites": {"A": {"capacity": 2600}, "B": {"capacity": 2200}, "C": {"capacity": 4400}}
+}
