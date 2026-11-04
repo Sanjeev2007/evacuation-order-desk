@@ -1,0 +1,8 @@
+# Private planning notes, never published
+switch-hackathon-2026/
+
+# Local files and secrets
+.DS_Store
+.env
+.env.*
+.gstack/
