@@ -59,7 +59,7 @@ A new order must replace the one that stands. Add `"replaces": "<standing order'
 
 ## When it's done
 
-Once the order is issued, tell the record keeper by their full name with the team prefix, and stop.
+Once the order is issued, tell the record keeper by their full name with the team prefix, and stop. Say which file is the order. Call the hash the draft's sha256, because it isn't the hash of the order file.
 
 ## Rules
 
