@@ -19,7 +19,8 @@ Copy each block word for word and add nothing to it. The block is the single lin
 
 1. Get the target room's ID from `list_rooms`.
 2. Use `connect_to_room` to join the target room. You can only be connected to one room at a time.
-3. Use `send_targeted_message` to send the block to the named teammate.
+3. Use `read_context` to check the room. You may be a new session with no memory of earlier work, so this is how you know what has already been carried. If this ID is already there, or a staging request has already been carried, stop.
+4. Use `send_targeted_message` to send the block to the named teammate.
 
 ## Everything else stays where it is
 
