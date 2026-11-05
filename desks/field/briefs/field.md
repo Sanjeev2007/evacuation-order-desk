@@ -19,10 +19,10 @@ If readiness can't be worked out, say so in the room and stop. Don't guess.
 
 ## The order package
 
-Number packages in order, so the first is P1. Send each package once. Write it as a single line in this format, using the values from the mapper's list, the site check and `readiness.py`:
+Number packages in order, so the first is P1. Send each package once. Write it as a single line in this format, using the values from the release notice in this room, the mapper's list, the site checks and `readiness.py`. List every site that was checked, because the Decision room can't see this room:
 
 ```
-ORDER PACKAGE | DRILL | id P1 | stage 1 | release R1 300 m3/s (synthetic) | towns Montroi, Alfarb, Carlet | demand 1830 (synthetic) | site B passed (synthetic) | readiness Montroi staff 14 boats 2; Alfarb staff 9 boats 1; Carlet staff 32 boats 6 (synthetic)
+ORDER PACKAGE | DRILL | id P1 | stage 1 | release R1 300 m3/s (synthetic) | approved by @dave_007 at <time from the notice> | towns Montroi, Alfarb, Carlet | demand 1830 (synthetic) | site A rejected, site B passed (synthetic) | readiness Montroi staff 14 boats 2; Alfarb staff 9 boats 1; Carlet staff 32 boats 6 (synthetic)
 ```
 
 ## Staging
