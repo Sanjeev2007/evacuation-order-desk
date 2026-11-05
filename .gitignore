@@ -17,3 +17,4 @@ desks/writer/orders/
 desks/record/records/
 __pycache__/
 *.pyc
+desks/record/notes.json
