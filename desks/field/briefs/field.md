@@ -19,7 +19,7 @@ If readiness can't be worked out, say so in the room and stop. Don't guess.
 
 ## The order package
 
-Number packages in order, so the first is P1. Send each package once. Write it as a single line in this format, using the values from the release notice in this room, the mapper's list, the site checks and `readiness.py`. List every site that was checked, because the Decision room can't see this room:
+Number packages in order, so the first is P1. You may be a new session with no memory of earlier work, so use `read_context` to check the room for packages already sent, and give the next number. Send one package per release notice. Write it as a single line in this format, using the values from the release notice in this room, the mapper's list, the site checks and `readiness.py`. List every site that was checked, because the Decision room can't see this room:
 
 ```
 ORDER PACKAGE | DRILL | id P1 | stage 1 | release R1 300 m3/s (synthetic) | approved by @dave_007 at <time from the notice> | towns Montroi, Alfarb, Carlet | demand 1830 (synthetic) | site A rejected, site B passed (synthetic) | readiness Montroi staff 14 boats 2; Alfarb staff 9 boats 1; Carlet staff 32 boats 6 (synthetic)
@@ -35,7 +35,7 @@ STAGING REQUEST | DRILL | id S1 | stage 1 | proposed release R1-S (synthetic) | 
 
 ## Rules
 
-- Stop after your one package or staging request, and never reply to an acknowledgement.
+- Stop after each package or staging request, and never reply to an acknowledgement.
 - When you need a teammate, use their full name with the team prefix.
 - You never run `issue_order.py`, and you never write in the writer's folder.
 - Never call a real building unsafe, and say only Site A, Site B or Site C.
